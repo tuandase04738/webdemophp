@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
+use App\Repositories\User\UserRepositoryInterface;
 
 class ManageController extends Controller
 {
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,16 +23,12 @@ class ManageController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $listUserWaiting = User::where('status',1)->get(['id','username','email']);
+        $listUserWaiting = $this->userRepository->getAllPendingRequest();
         return view('manage', ['listUserWaiting' => $listUserWaiting ]);
     }
 
     public function acceptForm(Request $request, $id) {
-        $user = User::find($id);
-        $user->status =$request->status;
-        $user->save();
+        $this->userRepository->handleRequest($id, $request->status);
         return redirect()->back();
     }
-
-    
 }

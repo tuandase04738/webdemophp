@@ -16,7 +16,7 @@ Auth::routes();
 
 Route::get('/', 'Auth\LoginController@showLoginForm')->name('loginform');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/home', 'HomeController@updateStatus')->name('update');
+Route::post('/home', 'HomeController@register')->name('update');
 Route::get('/manage', 'ManageController@index')->name('manage');
 Route::post('/manage/{id}', 'ManageController@acceptForm')->name('acceptform');
 
